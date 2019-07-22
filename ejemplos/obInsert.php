@@ -5,11 +5,9 @@
  * Date/Time: 25/4/2018/22:40
  * Description:
  */
-include '../Sql.php';
-include '../GestorDB.php';
-include '../GestorMySQL.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$bd = \Librerias\Datos\GestorMySQL::obtenerInstancia('produccion', array(
+$bd = \Vigoron\GestorDatos\GestorMySQL::obtenerInstancia('produccion', array(
     'servidor'      => 'localhost',
     'usuario'       => 'root',
     'contrasena'    => '',
@@ -17,7 +15,7 @@ $bd = \Librerias\Datos\GestorMySQL::obtenerInstancia('produccion', array(
     'persistente'   => true
 ));
 
-$sql = new \Librerias\Datos\Sql();
+$sql = new \Vigoron\GestorDatos\Sql();
 
 $sql->insertInto('clientes')
     ->setValue('nombre:string', 'Juan')
