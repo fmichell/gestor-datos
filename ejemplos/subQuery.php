@@ -5,9 +5,9 @@
  * Date/Time: 26/4/2018/10:47
  * Description:
  */
-include '../Sql.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$sql = new \Librerias\Datos\Sql();
+$sql = new \Vigoron\GestorDatos\Sql();
 
 /*
  * SELECT nombre
