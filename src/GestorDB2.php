@@ -8,11 +8,11 @@
  * Description: 
  */
 
-namespace Vigoron\GestorDatos;
+namespace fmichell\GestorDatos;
 
 /**
  * Class GestorDB2
- * @package Vigoron\GestorDatos
+ * @package fmichell\GestorDatos
  */
 class GestorDB2 {
 

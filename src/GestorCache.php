@@ -7,10 +7,10 @@
  * Description: 
  */
 
-namespace Vigoron\GestorDatos;
+namespace fmichell\GestorDatos;
 /**
  * Class GestorCache
- * @package Vigoron\GestorDatos
+ * @package fmichell\GestorDatos
  */
 class GestorCache {
 

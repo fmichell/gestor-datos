@@ -7,7 +7,7 @@
  */
 require __DIR__ . '/../vendor/autoload.php';
 
-$bd = \Vigoron\GestorDatos\GestorMySQL::obtenerInstancia('produccion', array(
+$bd = \fmichell\GestorDatos\GestorMySQL::obtenerInstancia('produccion', array(
     'servidor'      => 'localhost',
     'usuario'       => 'root',
     'contrasena'    => '',
@@ -15,7 +15,7 @@ $bd = \Vigoron\GestorDatos\GestorMySQL::obtenerInstancia('produccion', array(
     'persistente'   => true
 ));
 
-$sql = new \Vigoron\GestorDatos\Sql();
+$sql = new \fmichell\GestorDatos\Sql();
 
 $sql->update('clientes')
     ->setValue('nombre:string', 'Juan Carlos')

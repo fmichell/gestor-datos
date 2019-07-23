@@ -7,7 +7,7 @@
  */
 require __DIR__ . '/../vendor/autoload.php';
 
-$sql = new \Vigoron\GestorDatos\Sql();
+$sql = new \fmichell\GestorDatos\Sql();
 
 /*
  * SELECT nombre

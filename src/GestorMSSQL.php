@@ -8,10 +8,10 @@
  * Description: 
  */
 
-namespace Vigoron\GestorDatos;
+namespace fmichell\GestorDatos;
 /**
  * Class GestorMSSQL
- * @package Vigoron\GestorDatos
+ * @package fmichell\GestorDatos
  */
 class GestorMSSQL extends GestorDB {
 
