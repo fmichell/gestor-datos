@@ -169,7 +169,7 @@ class GestorCache {
             $d = ob_get_contents();
             ob_clean();
 
-            util_depurar_var("GUARDAR<br>LLAVE: " . $llave . "<br>EXPIRACION: " . $expiracion . "<br>DATOS: <br>" . $d);
+            self::_depurar_var("GUARDAR<br>LLAVE: " . $llave . "<br>EXPIRACION: " . $expiracion . "<br>DATOS: <br>" . $d);
         }
 
         return $this->mc->set($llave, $datos, $expiracion);
@@ -218,7 +218,7 @@ class GestorCache {
             $d = ob_get_contents();
             ob_clean();
 
-            util_depurar_var("OBTENER<br>LLAVE: " . $llave . "<br>DATOS: <br>" . $d);
+            self::_depurar_var("OBTENER<br>LLAVE: " . $llave . "<br>DATOS: <br>" . $d);
         }
 
         return $datos;
@@ -259,7 +259,7 @@ class GestorCache {
         $llave = $this->obtenerPrefijo() . $llave;
 
         if ($this->_debug == true) {
-            util_depurar_var("ELIMINAR<br>LLAVE: " . $llave);
+            self::_depurar_var("ELIMINAR<br>LLAVE: " . $llave);
         }
 
         return $this->mc->delete($llave);
@@ -287,6 +287,19 @@ class GestorCache {
     public function obtenerPrefijo()
     {
         return self::ANTECEDENTE_LLAVE . $this->_app . '_' . $this->_cuentaId . '_';
+    }
+
+    /**
+     * @param $valor
+     * @param null $tiempo_inicial
+     */
+    private static function _depurar_var($valor)
+    {
+        echo "\r\n<div style=\"border: solid 2px #CCC; padding: 5px; margin-bottom: 1em;\">\r\n";
+        echo "<pre>\r\n";
+        var_export($valor);
+        echo "\r\n</pre>\r\n";
+        echo "</div>\r\n";
     }
 
 }

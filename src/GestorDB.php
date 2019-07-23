@@ -715,15 +715,14 @@ abstract class GestorDB {
     {
         $q = $this->_obtenerConsultaDefectuosa();
 
-        echo "\r\n<div class=\"util_depurar_var\">\r\n";
+        echo "\r\n<div style=\"border: solid 2px #CCC; padding: 5px; margin-bottom: 1em;\">\r\n";
         var_export($q);
         echo "</div>\r\n";
-
     }
 
     private static function _mostrarEnPantalla($valor)
     {
-        echo "\r\n<div class=\"util_depurar_var\">\r\n";
+        echo "\r\n<div style=\"border: solid 2px #CCC; padding: 5px; margin-bottom: 1em;\">\r\n";
         echo "<pre>\r\n";
         var_export($valor);
         echo "\r\n</pre>\r\n";
