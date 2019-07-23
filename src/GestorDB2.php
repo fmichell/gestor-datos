@@ -128,15 +128,15 @@ class GestorDB2 {
         throw new \Exception(get_class($this) . ' | No puedes serializar esta instancia de clase.');
     }
 
-    private function _desconectar()
-    {
-        if ($this->_conexion)
-            db2_close($this->_conexion);
-    }
-
     public function __destruct()
     {
         $this->_desconectar();
+    }
+
+    public function _desconectar()
+    {
+        if ($this->_conexion)
+            db2_close($this->_conexion);
     }
 
     /**

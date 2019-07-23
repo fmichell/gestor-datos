@@ -29,7 +29,7 @@ abstract class GestorDB {
      */
     protected $_conexion;
     /**
-     * @var Sql|string
+     * @var Sql
      */
     private $_sql;
     /**
@@ -50,9 +50,6 @@ abstract class GestorDB {
      * @var \Exception
      */
     private $_gestorExcepcion;
-    /**
-     * @var \GestorCache
-     */
 
     /*
      * Propiedades de cache
