@@ -679,11 +679,23 @@ class Sql {
      * Agrega multiples valores para ser ejecutados en consultas independientes que deben ser ejecutados como Bash.
      * Este méto-do sustituye a la práctica de hacer un INSERT dentro de un bucle.
      *
-     * Esté méto-do NO replaza a los méto-dos setValue y setValues, los que siempre deberán ser llamados para definir los
+     * Este méto-do NO replaza a los méto-dos setValue y setValues, los que siempre deberán ser llamados para definir los
      * parámetros y los tipos de datos. Al momento de declarar los parámetros deberán ser definidos con valores nulos.
      * El méto-do setBashValue solamente deberá ser alimentado con los valores a ejecutar,
      * sin necesidad de definir nuevamente el nombre del parámetro y el tipo de datos, pues estos ya tendrían que haber
      * sido definidos con los méto-dos setValue o setValues.
+     *
+     * El parámetro $isSingle determina cómo se alimentan los valores.
+     * Si es false, significa que se parasaran todos los valores en un solo arreglo;
+     * $vals = array (
+     *      array('v1' => 1, 'v2' => 1),
+     *      array('v1' => 2, 'v2' => 2)
+     * );
+     * $sql->setBashValues($vals)
+     * Si es true, significa que se alimentará un valor a la vez, por ejemplo cuando se alimenta mediante un bucle.
+     * foreach ($vals as $v) {
+     *      $sql->setBashValues($v, true)
+     * };
      *
      * @example:
      * <code>
@@ -692,23 +704,33 @@ class Sql {
      * $sql->setValue('v1:int', null);
      * $sql->setValue('v2:int', null);
      * $sql->setBashValues(array(
-     * array('v1' => 1, 'v2' => 1),
-     * array('v1' => 2, 'v2' => 2)
+     *      array('v1' => 1, 'v2' => 1),
+     *      array('v1' => 2, 'v2' => 2)
      * ));
      * ?>
      * </code>
      *
      * @param array $arrayValues
+     * @param bool $isSingle
      *
      * @return $this
      * @throws \Exception
      */
-    public function setBashValues(array $arrayValues)
+    public function setBashValues(array $arrayValues, $isSingle = false)
     {
         $this->getPrepare();
 
         // Definimos la bandera de ejecución en Bash como true.
         $this->_bashQuery = true;
+
+        // Preparamos valor single.
+        if ($isSingle === true) {
+
+            if (is_array( $cv = current($arrayValues) ))
+                throw new \Exception(get_class($this) . ' | Un valor pasado como Single no puede contener un array de arrays. ');
+
+            $arrayValues = array($arrayValues);
+        }
 
         // Asignamos los valores.
         foreach ($arrayValues as $k => $values) {
@@ -730,6 +752,9 @@ class Sql {
             }
 
             $this->_bashParams[] = $prepareParams;
+
+            // Liberamos memoria
+            unset($arrayValues[$k]);
 
         }
 
@@ -1237,6 +1262,7 @@ class Sql {
      * Genera un SELECT y lo retorna como un string.
      *
      * @return string
+     * @throws \Exception
      */
     private function _getSelectStatement()
     {
@@ -1298,6 +1324,7 @@ class Sql {
      * Genera un INSERT y lo retorna como string.
      *
      * @return string
+     * @throws \Exception
      */
     private function _getInsertStatement()
     {
@@ -1317,8 +1344,8 @@ class Sql {
                 $valueStatement[] = $this->_getValueStatement($values);
             }
 
-            // TODO No me gusta esta forma de acceder al array (con el índice). Intenté usar current pero por alguna razón no me funcionó. Revisar please.
-            $fieldsStatement = $this->_values[0];
+            reset($this->_values);
+            $fieldsStatement = current($this->_values);
 
         } else {
             $valueStatement[] = $this->_getValueStatement($this->_values);
@@ -1326,9 +1353,7 @@ class Sql {
             $fieldsStatement = $this->_values;
         }
 
-        foreach ($fieldsStatement as $k => $field) {
-            $fieldsStatement[$k] = $field['field'];
-        }
+        $fieldsStatement = array_column($fieldsStatement, 'field');
 
         $query.= ' ('.implode(', ', $fieldsStatement).') VALUES ' . implode(', ', $valueStatement);
 
@@ -1339,7 +1364,9 @@ class Sql {
      * Genera un string con los valores concatenados.
      *
      * @param array $values
+     *
      * @return string
+     * @throws \Exception
      */
     private function _getValueStatement($values)
     {
@@ -1408,6 +1435,7 @@ class Sql {
      * Genera un DELETE y lo retorna como un string.
      *
      * @return string
+     * @throws \Exception
      */
     private function _getDeleteStatement()
     {
@@ -1463,7 +1491,9 @@ class Sql {
      *
      * @param array $wheres
      * @param bool $subStatement Indica si $where es un substatement
+     *
      * @return bool|string
+     * @throws \Exception
      */
     private function _getWhereStatement($wheres, $subStatement = false)
     {
@@ -1575,6 +1605,7 @@ class Sql {
      * Retorna una consulta preparada.
      *
      * @return string
+     * @throws \Exception
      */
     public function __toString()
     {
@@ -1587,6 +1618,7 @@ class Sql {
      * Muestra en pantalla un query preparado o procesado.
      *
      * @param bool
+     * @throws \Exception
      */
     public function showQuery($proceced = true)
     {
@@ -1602,6 +1634,12 @@ class Sql {
         echo $html;
     }
 
+    /**
+     * Retorna el string de la consulta SQL con los valores remplazando los parámetros.
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function getQuery()
     {
         $this->getPrepare();

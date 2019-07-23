@@ -97,3 +97,30 @@ $sql->query('INSERT INTO clientes (nombre, apellido, edad, fecha_registro)
 
 //$bd->sql($sql)->ejecutar();
 
+$vals = array(
+    array(
+        'nombre' => 'Adolfo',
+        'apellido' => 'Ortega',
+        'edad' => 51,
+        'fecha_registro' => date('Y-m-d')
+    ),
+    array(
+        'nombre' => 'Isidro',
+        'apellido' => 'Arellano',
+        'edad' => 36,
+        'fecha_registro' => date('Y-m-d')
+    )
+);
+
+$sql->query('INSERT INTO clientes (nombre, apellido, edad, fecha_registro) 
+             VALUES ([nombre], [apellido], [edad], [fecha_registro])', array(
+    'nombre:string' => null,
+    'apellido:string' => null,
+    'edad:int' => null,
+    'fecha_registro:date' => null));
+foreach ($vals as $v) {
+    $sql->setBashValues($v, true);
+}
+$sql->showQuery();
+
+//$bd->sql($sql)->ejecutar();
